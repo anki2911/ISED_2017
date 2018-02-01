@@ -1,0 +1,97 @@
+\section{Background} \label{back}
+\noindent
+In this section, we discuss the basic organization of DRAM.
+
+\subsection{Organization of DRAM}\label{b1}
+
+\begin{figure}[b]
+\centering
+\includegraphics[width=8cm,height=3cm]{Dram_org.png}
+\caption{Organisation of DRAM}
+\label{fig3}
+\end{figure}
+
+
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=6cm,height=3cm]{dram_state.png}
+\caption{Simplified overview of important states of a DRAM}
+\label{fig4}
+\end{figure}
+
+
+\noindent
+Main memory is stored in DRAM cells that have much higher storage density. DRAM chips are large, rectangular arrays of memory 
+cells with support logic that is used for reading and writing data in the arrays, and refresh circuitry to maintain the 
+integrity of stored data~\cite{wiki:xxx1}. DRAM devices are composed of basic blocks of DRAM memory. According to storage 
+oraganization, memory is hierarchically organized into rank, bank and array. Multiple DRAM devices are accessed in parallel 
+which together forms a DRAM rank~\cite{Rixner:2000:MAS:342001.339668}. DRAM devices in the same rank share the same bus for 
+address and command and another bus for data communication. Each DRAM device is made up of multiple DRAM arrays which store 
+the data. Each of these arrays can be accessed independently. A group of DRAM arrays in different DRAM devices that are 
+accessed together form a DRAM bank. A DRAM bank is a 2D array of cells: rows x columns. A DRAM row is also called a DRAM 
+page. Memory arrays are arranged in rows and columns of memory cells called wordlines and bitlines, respectively. Each memory 
+cell has a unique location or address defined by the intersection of a row and a column. A DRAM cell stores a bit in a 
+capacitor and hence they are needed to be charged periodically to prevent loss of data. Fig.\ref{fig3} shows the 
+organisation of DRAM.
+
+\subsection{DRAM access commands}\label{b2}
+\noindent
+A number of DRAM commands such as PRECHARGE, ACTIVATE, READ, WRITE, REFRESH and IDLE are used to access DRAM cells for 
+different DRAM operations. Fig.\ref{fig4} shows a brief overview of the state transition of a DRAM. There are two types of 
+transitions in a DRAM, transition due to DRAM commands and transition triggered by time elapse. The curved arrows represent 
+the transitions caused due to elapse of time and the straight arrows represent the transitions caused by issue of DRAM 
+commands. Details of the DRAM access commands are given in~\cite{akesson2010introduction}.
+
+
+%PRECHARGE command precharges the bit lines and a new row is set ready to be accessed. PRECHARGE command is issued before 
+%ccessing a new row. After fully precharging the bit lines, the bank goes back to Idle state.
+%ACTIVATE command opens a row in a bank for access. The data is transfered from DRAM cells to the row buffer. While in Active 
+%state, a READ or a WRITE command may be issued. The same row remains active until a PRECHARGE. 
+%READ command initiates a burst read from an active row in a bank.
+%WRITE command initiates a burst write to an active row in a bank.
+%REFRESH command refreshes the target bank and rows within the DRAM and prevents decaying of data. So it is necessary to 
+%issue REFRESH command at regular intervals in order to prevent data loss in DRAMs.
+
+\subsection{Row Buffer Management Policy in DRAM}\label{b3}
+\noindent
+In DRAM devices, arrays of sense amplifiers act as buffers that provide temporary data storage. Policies that manage the 
+operation of sense amplifiers are known as row buffer management policies. In ordinary DRAM devices, open-page policy and 
+close-page policy are mainly used.
+
+\begin{itemize}
+\item Open-Page policy: The open-page row buffer management policy usually favors memory accesses to the same row of memory by 
+keeping the sense amplifiers open and holding the data for ready access. Whenever a row of data is brought to the array of 
+sense amplifiers in a DRAM cell, different columns of the same row can be accessed again and again having only column access 
+latency. Whenever a different row of the same bank needs to be accessed, the memory controller first precharges the DRAM 
+array, then activates the desired row and finally allows for column access. This policy is best suited for sequential memory 
+accesses and increases performance by better exploiting spatial and temporal locality in memory.
+
+\item Close-Page policy: The close-page row buffer management policy works better when we have random memory accesses across
+different rows. This policy precharges the row after every memory access. So we can keep the bank in Idle state after every 
+row access in order to avoid the precharging overhead.  
+\end{itemize}
+
+\subsection{Different timing constraints between DRAM commands}\label{b4}
+\noindent
+Minimum delay must be maintained between two successive DRAM commands to ensure correct operation of a DRAM. Two types of 
+timing constraints exist in DRAM: 
+
+\begin{itemize}
+\item Intra Bank Timing constraints - When two successive commands access the same bank, some amount of delay must be maintained.
+However, these delays vary from device to device. Some DRAM timing constraints which are relevant to our implementation are:
+\begin{itemize}
+\item Row Precharge time- time to precharge a complete row. It is actually the minimum delay between a PRECHARGE command and a subsequent command in the same bank.
+\item Row Access time- minimum time interval between ACTIVATE and onset of next PRECHARGE command in the same bank.
+\item Row to Column delay- time interval between ACTIVATE and a subsequent READ or WRITE command in the same bank.
+\item Column Access delay- time required to access the columns of a particular row in the row buffer.
+\item Row Cycle time- minimum interval to access different rows in the same bank in memory.
+\end{itemize}
+\item Inter Bank Timing constraints- DRAM arrays for different banks are in the same DRAM device. Thus, hardware resources are 
+sharable between banks. Address, commands and even data buses are shared by the ranks. Therefore, timing constraints are 
+to be satisfied to avoid conflicts in hardware resources. Some inter-bank timing constraints are:
+\begin{itemize}
+\item Row activation to Row activation delay- time interval between two ACTIVATEs to different banks.
+\item Data Burst duration- busy period of the data bus.
+\end{itemize}
+\end{itemize}

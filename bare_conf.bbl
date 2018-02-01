@@ -1,0 +1,97 @@
+\begin{thebibliography}{10}
+
+\bibitem{Akesson11-DATE}
+B.~Akesson and K.~Goossens.
+\newblock Architectures and modeling of predictable memory controllers for
+  improved system integration.
+\newblock In {\em Design, Automation Test in Europe Conference Exhibition
+  (DATE), 2011}, pages 1 --6, March 2011.
+
+\bibitem{akesson2008real}
+B.~Akesson, L.~Steffens, E.~Strooisma, and K.~Goossens.
+\newblock Real-time scheduling using credit-controlled static-priority
+  arbitration.
+\newblock In {\em Embedded and Real-Time Computing Systems and Applications,
+  2008. RTCSA'08. 14th IEEE International Conference on}, pages 3--14. IEEE,
+  2008.
+
+\bibitem{Giannopoulou:2013:SMA:2555754.2555771}
+G.~Giannopoulou, N.~Stoimenov, P.~Huang, and L.~Thiele.
+\newblock Scheduling of mixed-criticality applications on resource-sharing
+  multicore systems.
+\newblock In {\em Proceedings of the Eleventh ACM International Conference on
+  Embedded Software}, EMSOFT '13, pages 17:1--17:15, Piscataway, NJ, USA, 2013.
+  IEEE Press.
+
+\bibitem{Goossens13CODES}
+S.~Goossens, J.~Kuijsten, B.~Akesson, and K.~Goossens.
+\newblock A reconfigurable real-time {SDRAM} controller for mixed
+  time-criticality systems.
+\newblock In {\em Hardware/Software Codesign and System Synthesis (CODES+ISSS),
+  2013 International Conference on}, pages 1--10, September 2013.
+
+\bibitem{gustafsson2010malardalen}
+J.~Gustafsson, A.~Betts, A.~Ermedahl, and B.~Lisper.
+\newblock The m{\"a}lardalen wcet benchmarks: Past, present and future.
+\newblock In {\em OASIcs-OpenAccess Series in Informatics}, volume~15. Schloss
+  Dagstuhl-Leibniz-Zentrum fuer Informatik, 2010.
+
+\bibitem{hassan2017predictable}
+M.~Hassan.
+\newblock Predictable shared memory resources for multi-core real-time systems.
+\newblock 2017.
+
+\bibitem{kim2014bounding}
+H.~Kim, D.~De~Niz, B.~Andersson, M.~Klein, O.~Mutlu, and R.~Rajkumar.
+\newblock Bounding memory interference delay in cots-based multi-core systems.
+\newblock In {\em Real-Time and Embedded Technology and Applications Symposium
+  (RTAS), 2014 IEEE 20th}, pages 145--154. IEEE, 2014.
+
+\bibitem{paolieri2013timing}
+M.~Paolieri, E.~Qui{\~n}ones, and F.~J. Cazorla.
+\newblock Timing effects of ddr memory systems in hard real-time multicore
+  architectures: Issues and solutions.
+\newblock {\em ACM Transactions on Embedded Computing Systems (TECS)},
+  12(1s):64, 2013.
+
+\bibitem{reineke2011pret}
+J.~Reineke, I.~Liu, H.~D. Patel, S.~Kim, and E.~A. Lee.
+\newblock Pret dram controller: Bank privatization for predictability and
+  temporal isolation.
+\newblock In {\em Hardware/Software Codesign and System Synthesis (CODES+
+  ISSS), 2011 Proceedings of the 9th International Conference on}, pages
+  99--108. IEEE, 2011.
+
+\bibitem{Wang:2005:MDM:1104471}
+David~Tawei Wang.
+\newblock {\em Modern Dram Memory Systems: Performance Analysis and Scheduling
+  Algorithm}.
+\newblock PhD thesis, College Park, MD, USA, 2005.
+\newblock AAI3178628.
+
+\bibitem{wiki:xxx1}
+Wikipedia.
+\newblock Dynamic random-access memory --- wikipedia{,} the free encyclopedia,
+  2017.
+\newblock [Online; accessed 10-April-2017].
+
+\bibitem{wiki:xxx2}
+Wikipedia.
+\newblock Earliest deadline first scheduling --- wikipedia{,} the free
+  encyclopedia, 2017.
+\newblock [Online; accessed 11-April-2017].
+
+\bibitem{wiki:xxx3}
+Wikipedia.
+\newblock Rate-monotonic scheduling --- wikipedia{,} the free encyclopedia,
+  2017.
+\newblock [Online; accessed 11-April-2017].
+
+\bibitem{yun2014palloc}
+H.~Yun, R.~Mancuso, Z.~Wu, and R.~Pellizzoni.
+\newblock Palloc: Dram bank-aware memory allocator for performance isolation on
+  multicore platforms.
+\newblock In {\em Real-Time and Embedded Technology and Applications Symposium
+  (RTAS), 2014 IEEE 20th}, pages 155--166. IEEE, 2014.
+
+\end{thebibliography}

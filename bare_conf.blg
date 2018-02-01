@@ -1,0 +1,49 @@
+This is BibTeX, Version 0.99d (TeX Live 2013/Debian)
+Capacity: max_strings=35307, hash_size=35307, hash_prime=30011
+The top-level auxiliary file: bare_conf.aux
+The style file: plain.bst
+Database file #1: bare_conf.bib
+Warning--empty journal in hassan2017predictable
+Warning--empty school in Wang:2005:MDM:1104471
+You've used 14 entries,
+            2118 wiz_defined-function locations,
+            578 strings with 6927 characters,
+and the built_in function-call counts, 5239 in all, are:
+= -- 518
+> -- 242
+< -- 8
++ -- 98
+- -- 82
+* -- 327
+:= -- 829
+add.period$ -- 49
+call.type$ -- 14
+change.case$ -- 82
+chr.to.int$ -- 0
+cite$ -- 16
+duplicate$ -- 216
+empty$ -- 421
+format.name$ -- 82
+if$ -- 1151
+int.to.chr$ -- 0
+int.to.str$ -- 14
+missing$ -- 10
+newline$ -- 74
+num.names$ -- 28
+pop$ -- 117
+preamble$ -- 1
+purify$ -- 69
+quote$ -- 0
+skip$ -- 163
+stack$ -- 0
+substring$ -- 263
+swap$ -- 74
+text.length$ -- 8
+text.prefix$ -- 0
+top$ -- 0
+type$ -- 56
+warning$ -- 2
+while$ -- 48
+width$ -- 16
+write$ -- 161
+(There were 2 warnings)

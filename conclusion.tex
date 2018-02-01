@@ -1,0 +1,10 @@
+\section{Conclusion} \label{con}
+\noindent
+In this paper, we present the problem of open page policy in state-of-the-art DRAM controllers and the problem in 
+using these DRAMs in real time systems. In real time systems, though the real time tasks are scheduled based on some priority
+based scheduling algorithms at the processor, the tasks are not executed in the same order in the memory due to prioritization
+of some other tasks at the DRAM controller. This becomes a bottleneck to guarantee 
+completion of all real time tasks within their deadline. Finally, we proposed a scheduling algorithm at the DRAM which 
+schedules the tasks based on a cost function evaluated on the basis of some local task parameters. We implemented an 
+end-to-end simulator for the same and generated our results on the Malardalen WCET benchmark programs.
+

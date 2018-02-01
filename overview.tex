@@ -1,0 +1,164 @@
+\section{Overview of the Problem}\label{mot}
+\noindent
+Given a set of real time tasks, each with a deadline, the problem is to schedule the tasks on the DRAM such that the fewest 
+number of tasks miss their deadlines.
+
+$i^{th}$ task instance in a real time system, denoted by $\tau_{i}$ can be represented with the help of the following 
+parameters -
+\[\tau_{i} = (A_{i}, E_{i}, D_{i}, P_{i})\]
+where $A_{i}$ denotes the arrival time of $i^{th}$ task instance, $E_{i}$ denotes worst case execution time of $i^{th}$ task instance,
+$D_{i}$ denotes deadline of $i^{th}$ task instance, $P_{i}$ denotes the time interval after which the next task instance 
+arrives.
+
+We present our problem with the help of a motivating example.
+\subsection{Motivating Example}
+\noindent
+Let us consider a simple DRAM with two banks, B0 and B1, each bank having a set of four rows. 
+The bank mapping of the two banks are as follows -
+\begin{itemize}
+ \item Bank B0 contains four sets of rows. Row 0 (addr 0-addr 3), Row 1 (addr 4-addr 7), Row 2 (addr 8-addr 11) and 
+ Row 3 (addr 12-addr 15).
+ \item Bank B1 contains four sets of rows. Row 0 (addr 16-addr 19), Row 1 (addr 20-addr 23), Row 2 (addr 24-addr 27) 
+ and Row 3 (addr 28-addr 31).
+\end{itemize}
+We consider that our DRAM follows open page policy, i.e., memory requests which result in row hit will be allowed to access 
+the DRAM. We consider two tasks T1 and T2 arriving at the same time instant and scheduled according to EDF at the processor.
+Each task consists of some CPU and Memory instructions. In this example, we have denoted the CPU instructions with $<$C$>$ and 
+the Memory instructions as $<$M addr$>$, which denotes a memory instruction at address ``addr''. We consider the task 
+specifications given in Table \ref{tab1}. Assume each CPU instruction takes 100 cycles to execute,
+each memory instruction takes 300 cycles to execute when there is a row miss and 200 cycles to execute when there is a row hit.
+Since tasks are scheduled according to EDF, T2 will be allowed to access the CPU earlier. A detailed picture of the 
+waiting queue at the processor, the processor, the memory buffer, the memory and the status of T1 and T2 at different
+cycles is described in Table \ref{tab2}. It can be inferred from this example, that due to address mapping policy, all the 
+memory requests are mapped to Bank B1. Again, due to the open row policy, some of T1's memory requests although arrived 
+earlier, could not get access to memory. As a result, T1 cannot complete its execution within its deadline. 
+
+If T1's memory request is allowed to execute in Bank B0, then T1 can easily complete its execution within its deadline.
+But executing a memory request in some other memory bank incurs a lot of overheads. We propose a novel method of bank aware 
+partitioning based on a cost function calculated locally taking into account all the overheads so that the tasks can complete 
+execution within deadline. We discuss our proposal in the following subsection.
+
+\begin{table}[t]
+\caption{Task Specifications}
+\begin{center}
+\scalebox{0.9}{
+ \begin{tabular}{|c|c|c|c|}\hline
+ \bf{Task}& \bf{Instructions}& \bf{Bank}& \bf{Deadline} \\ 
+ \bf{ID}  &             & \bf{Mapping}&      \\ \hline
+ T1 & C & & 1800 cycles \\
+    & M 25 & Bank1-Row2 & \\
+    & M 20 & Bank1-Row1 & \\
+    & C & & \\
+    & M 30 & Bank1-Row3 & \\
+    & M 28 & Bank1-Row3 & \\ \hline
+ T2 & C & & 1500 cycles \\
+    & M 30 & Bank1-Row3 & \\
+    & M 29 & Bank1-Row3 & \\
+    & C & & \\
+    & M 24 & Bank1-Row2 & \\ \hline
+ \end{tabular}
+ }
+ \end{center}
+\label{tab1}
+\end{table}
+
+\begin{table}[t]
+\centering
+\caption{A snapshot of the entire system at different cycles}
+\scalebox{0.9}{
+\begin{tabular}{|c|c|c|c|c|c|}\hline
+\bf{Cycle}&\bf{Waiting}&\bf{Processor}&\bf{Memory}&\bf{Memory}&\bf{Status} \\ 
+        &\bf{Queue}&              &\bf{Buffer}&             &\\ \hline
+       0& T1       & T2           &           &          &\\ \hline
+      99& T1       & T2           &           &          &\\ \hline
+     100&          & T1           &           &T2 $<$M 30$>$& T2-Row\\ 
+        &          &              &           &Bank1 Row 3& Miss\\ \hline
+     199&          & T1           &           &T2 $<$M 30$>$&\\ 
+        &          &              &           &Bank1 Row3&\\ \hline
+     200&          &              & T1        &T2 $<$M 30$>$&\\
+        &          &              &           &Bank1 Row3&\\ \hline
+     399&         &              & T1        &T2 $<$M 30$>$&\\ 
+        &          &              &           &Bank1 Row3&\\ \hline
+     400&          &              & T1        &T2 $<$M 29$>$& T2-Row\\
+        &          &              &           &Bank1 Row3& Hit\\ \hline
+     599&          &              & T1        &T2 $<$M 29$>$& \\
+        &          &              &           &Bank1 Row3&\\ \hline
+     600&          & T2           &           &T1 $<$M 25$>$& T1-Row\\ 
+        &          &              &           &Bank1 Row2& Miss\\ \hline
+     899&          &              & T2        &T1 $<$M 25$>$& \\
+        &          &              &           &Bank1 Row2&\\ \hline
+     900&          &              & T1        &T2 $<$M 24$>$& T2-Row\\ 
+        &          &              &           &Bank1 Row2& Hit\\ \hline
+    1099&          &              & T1        &T2 $<$M 24$>$& T2-complete \\ 
+        &          &              &           &Bank1 Row2& execution\\ \hline
+    1100&          &              &           &T1 $<$M 20$>$& T1-Row \\ 
+        &          &              &           &Bank1 Row1& Miss\\ \hline
+    1399&          &              &           &T1 $<$M 20$>$&\\
+        &          &              &           &Bank1 Row1&\\ \hline
+    1400&          & T1           &           &          &\\ \hline
+    1499&          & T1           &           &          &\\ \hline
+    1500&          &              &           &T1 $<$M 30$>$& T1-Row\\ 
+        &          &              &           &Bank1 Row3& Miss\\ \hline
+    1799&          &              &           &T1 $<$M 30$>$& \\
+        &          &              &           &Bank1 Row3&\\ \hline
+    1800&          &              &           &T1 $<$M 28$>$& T1-Deadline \\ 
+        &          &              &           &Bank1 Row3& Miss\\ \hline     
+\end{tabular}
+}
+
+\label{tab2}
+\end{table}
+
+\subsection{Detailed Methodology}
+\noindent
+We have implemented a two level scheduler, one at the processor and the other at the memory controller. We have applied EDF to 
+schedule tasks at the processor, i.e., tasks whose deadline is earliest is placed at the front of the priority queue and are 
+allowed to execute first. But as the memory requests arrive at the DRAM controller, they are not executed in the order 
+they are scheduled. Open page policy prioritizes those memory requests which result in row buffer hit of tasks. We propose 
+to keep a set of extra memory banks which will not participate in address mapping. These extra memory banks are also known as
+the reserved banks. We formulate a cost function based on some
+known task parameters and schedule tasks based on that cost function. Cost function, $Cost_{ij}$, is the cost to execute 
+$i^{th}$ instruction of $j^{th}$ task. We define another variable, $C_{ijk}$, which is the remaining time after execution
+of $i^{th}$ instruction of $j^{th}$ task in $k^{th}$ bank (where it is actually mapped) and is given by-
+\[C_{ijk} = D_{j} - (t_{ik} + e_{iw} + e_{ik} + e_{rem})\]\label{eq1}
+where $D_{j}$ : the deadline of $j^{th}$ task,\\
+$t_{ik}$ : the time to copy the $i^{th}$ instruction in $k^{th}$ bank,\\
+$e_{iw}$ : the maximum waiting time of $i^{th}$ task in the memory buffer due to presence of other tasks infront of the 
+$i^{th}$ instruction in the memory buffer,\\
+$e_{ik}$ : the execution time of $i^{th}$ instruction in $k^{th}$ bank if there is a row miss/hit,\\
+$e_{rem}$ : the worst case execution time required by the remaining instructions of $j^{th}$ task.
+
+Similarly, $C_{ijk'}$ is defined as the remaining time after execution of $i^{th}$ instruction of $j^{th}$ task in one of the 
+extra memory banks or the reserved banks, say k'. Our aim is to execute the $i^{th}$ instruction of $j^{th}$ task instance in the bank that allows us to 
+have greater remaining time so that there is a lesser chance of having a deadline miss. This is determined with the help of the 
+cost function $C_{ij}$ which is given by-
+
+\[Cost_{ij} = C_{ijk} - C_{ijk'}\]
+
+If $Cost_{ij}$ is greater than 0, we allow the task to execute in its own bank, otherwise we schedule it to execute in any one 
+of the reserved set of banks. Algorithm \ref{alg1} explains our proposed method.
+
+\begin{algorithm}[t]
+   \caption {\textcolor{black}{Scheduling Policy at the Memory Controller}}
+   \label{alg1}
+    \begin{algorithmic}[1]
+      \Function{SchedMemReq}{$Task$ $t$, Instruction $I$}\Comment{$t$ - Task, $I$ - $i^{th}$ memory instruction of task $t$}
+       \State {$t_{ik}$ - time to copy $i^{th}$ instruction in $k^{th}$ bank}
+       \State {$e_{iw}$ = maximum waiting time of $t$ due to tasks which are in the waiting queue ahead of $t$}
+       \State {$e_{ik}$ = execution time of $i^{th}$ instruction in $k^{th}$ bank in case of a row hit/miss}
+       \State {$e_{ik'}$ = execution time of $i^{th}$ instruction in its own bank in case of a row hit/miss}
+       \State {$e_{rem}$ = worst case execution time of all the remaining instructions}
+       \State {$C_{itk}$ = $t.deadline$ - ($t_{ik}$ + $e_{iw}$ + $e_{ik}$ + $e_{rem}$)}\Comment{$C_{itk}$ denotes the total time
+       remaining after executing $i^{th}$ instruction of task $t$ in $k^{th}$ bank}
+       \State {$C_{itk'}$ = $t.deadline$ - ($e_{iw}$ + $e_{ik'}$ + $e_{rem}$)}\Comment{$C_{itk}$ denotes the total time
+       remaining after executing $i^{th}$ instruction of task $t$ in its own bank}
+       \State {$Cost_{ij}$ = $C_{ijk}$ - $C_{ijk'}$}\Comment{$Cost_{ijk}$ denotes the cost incurred in the process}
+       \If {$Cost_{ij}$ $>$ 0}
+           \State {Schedule $t$ in its own bank}
+       \Else
+           \State {Schedule $t$ in some reserved banks}
+       \EndIf
+      \EndFunction  
+    \end{algorithmic}
+\end{algorithm}
+

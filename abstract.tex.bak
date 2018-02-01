@@ -1,0 +1,13 @@
+\begin{abstract}
+Real time embedded systems are systems where each task instance needs to be executed within its deadline. Different 
+scheduling policies are used at the processor to schedule real time tasks. Based on the scheduling policy used at the processor, 
+some tasks get prioritized over others. But the same priority is not always followed at the memory controller. DRAM controllers
+that are used in modern architecture platforms cannot always meet the deadline of all the real time tasks as the memory requests
+are executed on an open row policy. Therefore, some tasks miss their deadlines while getting served at the memory.
+In this paper, we propose a new memory scheduling policy which involves a bank aware partitioning of the requests across banks 
+based on a cost function on some task parameters to schedule memory requests so that the number of deadline misses get reduced 
+significantly in a real time system. We have used the Malardalen Worst Case Execution Time (WCET) benchmark programs as our real time tasks. We have generated
+traces of these benchmark programs by running them on an X86 processor. We have developed an end to end setup from processor to 
+memory and our results have been compared with state of the art DRAM controllers.
+Experimental results on these benchmark programs show the efficiency of our proposed scheme.
+\end{abstract}
